@@ -6,12 +6,13 @@
   <title>🎯 التحديات اليومية ريد ديد اونلاين</title>
 
   <script>
-  if (location.protocol !== "https:") {
-    location.href = "https://" + location.host + location.pathname + location.search;
-  }
-</script>
+    if (location.protocol !== "https:") {
+      location.href = "https://" + location.host + location.pathname + location.search;
+    }
+  </script>
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6596385917043322"
-     crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
 
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
 
@@ -38,6 +39,40 @@
       box-shadow:0 4px 20px rgba(0,0,0,.3);
       position:sticky;top:0;z-index:1000;
     }
+
+    /* ✅ شريط متحرك */
+    .ticker{
+      margin-top:10px;
+      background:rgba(21,23,27,.9);
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      box-shadow:0 6px 18px rgba(0,0,0,.25);
+    }
+    .ticker__track{
+      position:relative;
+      height:44px;
+      display:flex;
+      align-items:center;
+      overflow:hidden;
+    }
+    .ticker__text{
+      display:inline-block;
+      white-space:nowrap;
+      padding:0 18px;
+      font-weight:700;
+      color:var(--text);
+      will-change:transform;
+      animation:ticker-ltr 18s linear infinite; /* السرعة */
+    }
+    @keyframes ticker-ltr{
+      0%   { transform: translateX(-110%); }
+      100% { transform: translateX(110%); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .ticker__text{ animation:none; }
+    }
+
     header{
       background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
       border:1px solid var(--line);
@@ -47,8 +82,13 @@
       text-align:center;
     }
     h1{margin:0;font-weight:800;font-size:26px}
-    .card{background:var(--card);border:1px solid var(--line);
-      border-radius:18px;padding:16px;margin-top:14px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      margin-top:14px
+    }
     h2{margin-top:0;color:var(--accent);font-size:18px}
     ul{margin:0;padding:0;list-style:none}
     li{border-top:1px dashed var(--line);padding:8px 4px}
@@ -72,6 +112,13 @@
 
 <body>
   <div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
+
+  <!-- ✅ شريط متحرك: نصّه من ticker.txt -->
+  <div class="ticker" id="ticker" style="display:none;">
+    <div class="ticker__track">
+      <span class="ticker__text" id="tickerText"></span>
+    </div>
+  </div>
 
   <div class="wrap">
     <header>
@@ -100,103 +147,103 @@
     </div>
 
     <footer>
-  <p><b>💠 الموقع خاص بالتحديات اليومية ريد ديد 2 | برمجة العسيري 💠</b></p>
-  
-  <a class="join-btn" href="https://youtube.com/@tx66w?si=Q9dp9rsgmO42-ZpD" target="_blank">
-    YouTube
-  </a>
-  
-  <a class="join-btn" href="https://www.tiktok.com/@tx66w?_r=1&_t=ZS-913ywV8b5az" target="_blank">
-    TikTok
-  </a>
-</footer>
+      <p><b>💠 الموقع خاص بالتحديات اليومية ريد ديد 2 | برمجة العسيري 💠</b></p>
+
+      <a class="join-btn" href="https://youtube.com/@tx66w?si=Q9dp9rsgmO42-ZpD" target="_blank">
+        YouTube
+      </a>
+
+      <a class="join-btn" href="https://www.tiktok.com/@tx66w?_r=1&_t=ZS-913ywV8b5az" target="_blank">
+        TikTok
+      </a>
+    </footer>
   </div>
 
   <script>
-  // منع النسخ وفتح الكود
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  document.addEventListener('copy', e => e.preventDefault());
-  document.addEventListener('cut', e => e.preventDefault());
-  document.addEventListener('paste', e => e.preventDefault());
-  document.addEventListener('keydown', e => {
-    if (
-      e.key === 'F12' ||
-      (e.ctrlKey && e.shiftKey && ['I','C','J'].includes(e.key.toUpperCase())) ||
-      (e.ctrlKey && ['U','S','A','C','X'].includes(e.key.toUpperCase()))
-    ) {
-      e.preventDefault();
-      alert('🚫 ممنوع عرض أو نسخ كود الصفحة.');
-    }
-  });
-
-  // تحميل التحديات
-  fetch("font-size.txt?" + Date.now())
-    .then(r=>r.text())
-    .then(text=>{
-      const lines = text.trim().split(/\r?\n/);
-      const firstLine = lines[0];
-      document.getElementById("topdate").innerHTML = `📅 <b>تاريخ التحديث:</b> ${firstLine}`;
-      lines.shift();
-      let html = "";
-      let currentSection = "";
-      lines.forEach(line=>{
-        if(!line.trim()) return;
-        if(!line.match(/^0|^\$/)){
-          if(currentSection){ html += `</ul></div>`; }
-          currentSection = line.trim();
-          html += `<div class="card"><h2>${currentSection}</h2><ul>`;
-        } else {
-          html += `<li>${line}</li>`;
-        }
-      });
-      if(currentSection) html += "</ul></div>";
-      document.getElementById("challenges").innerHTML = html;
-    })
-    .catch(()=>{
-      document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
-    });
-
-  // ✅ 
-  const encoded = "aHR0cHM6Ly9tYWRhbS1uYXphci1sb2NhdGlvbi1hcGkuaGVyb2t1YXBwLmNvbS9sb2NhdGlvbi9jdXJyZW50";
-  const apiUrl = atob(encoded); // 
-
-  // ✅ 
-  fetch(apiUrl)
-    .then(res => res.json())
-    .then(data => {
-      const img = data?.data?.location?.image;
-      if (img) {
-        document.getElementById("nazar").innerHTML = `
-          <h2>📍 موقع مدام نزار </h2>
-          <img src="${img}" alt="Madam Nazar Location">
-        `;
-      } else {
-        document.getElementById("nazar").innerHTML = `
-          <h2>📍 موقع مدام نزار </h2>
-          <p>⚠️ لم يتم تحديث موقع نزار بعد، الرجاء التحقق لاحقًا.</p>
-        `;
+    // منع النسخ وفتح الكود
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+    document.addEventListener('paste', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && ['I','C','J'].includes(e.key.toUpperCase())) ||
+        (e.ctrlKey && ['U','S','A','C','X'].includes(e.key.toUpperCase()))
+      ) {
+        e.preventDefault();
+        alert('🚫 ممنوع عرض أو نسخ كود الصفحة.');
       }
-    })
-    .catch(()=>{
-      document.getElementById("nazar").innerHTML = `
-        <h2>📍 موقع مدام نزار </h2>
-        <p>❌ تعذر الاتصال بالخادم لعرض الصورة حاليًا.</p>
-      `;
     });
+
+    // ✅ تحميل نص الشريط من ملف ticker.txt
+    fetch("ticker.txt?" + Date.now())
+      .then(r => r.text())
+      .then(text => {
+        // لو الملف فيه عدة أسطر -> نحولها لنص واحد مع فاصل
+        const msg = text.trim().split(/\r?\n/).filter(Boolean).join(" • ");
+        if (!msg) return;
+
+        document.getElementById("tickerText").textContent = msg;
+        document.getElementById("ticker").style.display = "block";
+      })
+      .catch(() => {
+        // فشل التحميل: نخفي الشريط بصمت
+      });
+
+    // تحميل التحديات
+    fetch("font-size.txt?" + Date.now())
+      .then(r=>r.text())
+      .then(text=>{
+        const lines = text.trim().split(/\r?\n/);
+        const firstLine = lines[0];
+        document.getElementById("topdate").innerHTML = `📅 <b>تاريخ التحديث:</b> ${firstLine}`;
+        lines.shift();
+        let html = "";
+        let currentSection = "";
+        lines.forEach(line=>{
+          if(!line.trim()) return;
+          if(!line.match(/^0|^\$/)){
+            if(currentSection){ html += `</ul></div>`; }
+            currentSection = line.trim();
+            html += `<div class="card"><h2>${currentSection}</h2><ul>`;
+          } else {
+            html += `<li>${line}</li>`;
+          }
+        });
+        if(currentSection) html += "</ul></div>";
+        document.getElementById("challenges").innerHTML = html;
+      })
+      .catch(()=>{
+        document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
+      });
+
+    // ✅ API موقع مدام نزار (مشفّر)
+    const encoded = "aHR0cHM6Ly9tYWRhbS1uYXphci1sb2NhdGlvbi1hcGkuaGVyb2t1YXBwLmNvbS9sb2NhdGlvbi9jdXJyZW50";
+    const apiUrl = atob(encoded);
+
+    fetch(apiUrl)
+      .then(res => res.json())
+      .then(data => {
+        const img = data?.data?.location?.image;
+        if (img) {
+          document.getElementById("nazar").innerHTML = `
+            <h2>📍 موقع مدام نزار </h2>
+            <img src="${img}" alt="Madam Nazar Location">
+          `;
+        } else {
+          document.getElementById("nazar").innerHTML = `
+            <h2>📍 موقع مدام نزار </h2>
+            <p>⚠️ لم يتم تحديث موقع نزار بعد، الرجاء التحقق لاحقًا.</p>
+          `;
+        }
+      })
+      .catch(()=>{
+        document.getElementById("nazar").innerHTML = `
+          <h2>📍 موقع مدام نزار </h2>
+          <p>❌ تعذر الاتصال بالخادم لعرض الصورة حاليًا.</p>
+        `;
+      });
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
