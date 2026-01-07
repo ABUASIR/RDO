@@ -14,6 +14,9 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6596385917043322"
     crossorigin="anonymous"></script>
 
+  <!-- تحسين تحميل الخط -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
 
   <style>
@@ -40,7 +43,7 @@
       position:sticky;top:0;z-index:1000;
     }
 
-    /* ✅ شريط متحرك */
+    /* ✅ شريط متحرك (يظهر فورًا بنص مؤقت) */
     .ticker{
       margin-top:10px;
       background:rgba(21,23,27,.9);
@@ -63,14 +66,15 @@
       font-weight:700;
       color:var(--text);
       will-change:transform;
-      animation:ticker-ltr 18s linear infinite; /* السرعة */
+      /* ✅ المدة والمسافة تُحسب ديناميكيًا من JS */
+      animation: ticker-move var(--tickerDur, 18s) linear infinite;
     }
-    @keyframes ticker-ltr{
-      0%   { transform: translateX(-110%); }
-      100% { transform: translateX(110%); }
+    @keyframes ticker-move{
+      from { transform: translateX(calc(-1 * var(--tickerDistance, 100%))); }
+      to   { transform: translateX(var(--tickerDistance, 100%)); }
     }
     @media (prefers-reduced-motion: reduce){
-      .ticker__text{ animation:none; }
+      .ticker__text{ animation:none; transform:none; }
     }
 
     header{
@@ -113,10 +117,10 @@
 <body>
   <div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
 
-  <!-- ✅ شريط متحرك: نصّه من ticker.txt -->
-  <div class="ticker" id="ticker" style="display:none;">
-    <div class="ticker__track">
-      <span class="ticker__text" id="tickerText"></span>
+  <!-- ✅ شريط متحرك: يظهر فورًا ثم يستبدل النص من ticker.txt -->
+  <div class="ticker" id="ticker">
+    <div class="ticker__track" id="tickerTrack">
+      <span class="ticker__text" id="tickerText">⏳ جاري تحميل التنبيه...</span>
     </div>
   </div>
 
@@ -176,22 +180,69 @@
       }
     });
 
-    // ✅ تحميل نص الشريط من ملف ticker.txt
-    fetch("ticker.txt?" + Date.now())
+    /* =========================
+       ✅ Ticker: سرعة ثابتة + ظهور فوري
+       ========================= */
+
+    function setupTickerAnimation() {
+      const track = document.getElementById("tickerTrack");
+      const textEl = document.getElementById("tickerText");
+      if (!track || !textEl) return;
+
+      const afterFonts = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+
+      afterFonts.then(() => {
+        requestAnimationFrame(() => {
+          const trackW = track.clientWidth;
+          const textW  = textEl.scrollWidth;
+
+          // لو النص أقصر من الحاوية: نوقف الحركة
+          if (textW <= trackW) {
+            textEl.style.animation = "none";
+            textEl.style.transform = "none";
+            return;
+          }
+
+          // سرعة ثابتة بالبكسل/ثانية (عدّلها حسب رغبتك)
+          const speed = 80; // 60 أبطأ / 100 أسرع
+          const distance = textW + trackW;   // مسافة المرور كاملة
+          const duration = distance / speed; // ثواني
+
+          textEl.style.setProperty("--tickerDistance", distance + "px");
+          textEl.style.setProperty("--tickerDur", duration.toFixed(2) + "s");
+
+          // إعادة تشغيل الأنيميشن لضمان تطبيق القيم الجديدة
+          textEl.style.animation = "none";
+          // force reflow
+          void textEl.offsetWidth;
+          textEl.style.animation = "";
+        });
+      });
+    }
+
+    // ✅ تحميل نص الشريط من ملف ticker.txt (بدون Date.now لتقليل التأخير)
+    fetch("ticker.txt", { cache: "no-cache" })
       .then(r => r.text())
       .then(text => {
-        // لو الملف فيه عدة أسطر -> نحولها لنص واحد مع فاصل
         const msg = text.trim().split(/\r?\n/).filter(Boolean).join(" • ");
-        if (!msg) return;
-
+        if (!msg) {
+          document.getElementById("ticker").style.display = "none";
+          return;
+        }
         document.getElementById("tickerText").textContent = msg;
-        document.getElementById("ticker").style.display = "block";
+        setupTickerAnimation();
       })
       .catch(() => {
-        // فشل التحميل: نخفي الشريط بصمت
+        document.getElementById("ticker").style.display = "none";
       });
 
-    // تحميل التحديات
+    // إعادة الضبط عند تغيير حجم الشاشة/تدوير الجوال
+    window.addEventListener("resize", () => setupTickerAnimation());
+
+    /* =========================
+       ✅ تحميل التحديات
+       ========================= */
+
     fetch("font-size.txt?" + Date.now())
       .then(r=>r.text())
       .then(text=>{
@@ -218,7 +269,10 @@
         document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
       });
 
-    // ✅ API موقع مدام نزار (مشفّر)
+    /* =========================
+       ✅ API موقع مدام نزار (مشفّر)
+       ========================= */
+
     const encoded = "aHR0cHM6Ly9tYWRhbS1uYXphci1sb2NhdGlvbi1hcGkuaGVyb2t1YXBwLmNvbS9sb2NhdGlvbi9jdXJyZW50";
     const apiUrl = atob(encoded);
 
