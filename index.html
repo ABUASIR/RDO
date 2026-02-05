@@ -14,7 +14,6 @@
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6596385917043322"
     crossorigin="anonymous"></script>
 
-  <!-- تحسين تحميل الخط -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
@@ -42,8 +41,6 @@
       box-shadow:0 4px 20px rgba(0,0,0,.3);
       position:sticky;top:0;z-index:1000;
     }
-
-    /* ✅ شريط نصّي ثابت: يعرض سطرًا واحدًا ويتبدّل كل 3 ثواني */
     .ticker{
       margin-top:10px;
       background:rgba(21,23,27,.9);
@@ -69,7 +66,6 @@
       color:var(--text);
       animation:none !important;
     }
-
     header{
       background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
       border:1px solid var(--line);
@@ -110,7 +106,6 @@
 <body>
   <div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
 
-  <!-- ✅ صندوق السطور: يظهر فورًا ثم يقرأ من ticker.txt -->
   <div class="ticker" id="ticker">
     <div class="ticker__track" id="tickerTrack">
       <span class="ticker__text" id="tickerText">⏳ جاري تحميل التنبيه...</span>
@@ -124,13 +119,11 @@
 
     <div id="challenges">⏳ جاري تحميل التحديات...</div>
 
-    <!-- ✅ موقع مدام نزار -->
     <div class="nazar-card" id="nazar">
       <h2>📍 موقع مدام نزار </h2>
       <p>⏳ جاري تحميل الصورة...</p>
     </div>
 
-    <!-- ✅ إعلان Google AdSense -->
     <div class="bottom-ad" id="ad-box" style="display:none;">
       <ins class="adsbygoogle"
            style="display:block;margin:auto"
@@ -157,7 +150,6 @@
   </div>
 
   <script>
-    // منع النسخ وفتح الكود
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('copy', e => e.preventDefault());
     document.addEventListener('cut', e => e.preventDefault());
@@ -173,12 +165,9 @@
       }
     });
 
-    /* =========================
-       ✅ Ticker: عرض سطور بالتوالي كل 3 ثواني
-       ========================= */
     let tickerLines = [];
     let tickerIndex = 0;
-    const intervalTime = 5000; // ⏱️ 3 ثواني
+    const intervalTime = 5000;
 
     function showNextLine() {
       if (!tickerLines.length) return;
@@ -199,19 +188,13 @@
           return;
         }
 
-        // عرض أول سطر فورًا
         showNextLine();
-
-        // تبديل السطر كل 3 ثواني
         setInterval(showNextLine, intervalTime);
       })
       .catch(() => {
         document.getElementById("ticker").style.display = "none";
       });
 
-    /* =========================
-       ✅ تحميل التحديات
-       ========================= */
     fetch("font-size.txt?" + Date.now())
       .then(r=>r.text())
       .then(text=>{
@@ -238,35 +221,34 @@
         document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
       });
 
-    /* =========================
-       ✅ API موقع مدام نزار (مشفّر)
-       ========================= */
-    const encoded = "aHR0cHM6Ly9tYWRhbS1uYXphci1sb2NhdGlvbi1hcGkuaGVyb2t1YXBwLmNvbS9sb2NhdGlvbi9jdXJyZW50";
-    const apiUrl = atob(encoded);
+    function renderNazar(imgUrl) {
+      document.getElementById("nazar").innerHTML = `
+        <h2>📍 موقع مدام نزار </h2>
+        <img src="${imgUrl}" alt="Madam Nazar Location">
+      `;
+    }
 
-    fetch(apiUrl)
-      .then(res => res.json())
-      .then(data => {
-        const img = data?.data?.location?.image;
-        if (img) {
+    fetch("nazar.txt?" + Date.now(), { cache: "no-cache" })
+      .then(r => r.text())
+      .then(text => {
+        const url = (text || "").trim().split(/\r?\n/)[0]?.trim();
+
+        if (!url || !/^https?:\/\//i.test(url)) {
           document.getElementById("nazar").innerHTML = `
             <h2>📍 موقع مدام نزار </h2>
-            <img src="${img}" alt="Madam Nazar Location">
+            <p>⚠️ لم يتم وضع رابط صحيح داخل ملف nazar.txt</p>
           `;
-        } else {
-          document.getElementById("nazar").innerHTML = `
-            <h2>📍 موقع مدام نزار </h2>
-            <p>⚠️ لم يتم تحديث موقع نزار بعد، الرجاء التحقق لاحقًا.</p>
-          `;
+          return;
         }
+
+        renderNazar(url);
       })
-      .catch(()=>{
+      .catch(() => {
         document.getElementById("nazar").innerHTML = `
           <h2>📍 موقع مدام نزار </h2>
-          <p>❌ تعذر الاتصال بالخادم لعرض الصورة حاليًا.</p>
+          <p>❌ تعذر قراءة ملف nazar.txt</p>
         `;
       });
   </script>
 </body>
 </html>
-
