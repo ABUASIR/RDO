@@ -1,203 +1,368 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🎯 التحديات اليومية ريد ديد اونلاين</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 التحديات اليومية ريد ديد اونلاين</title>
 
-  <script>
-    if (location.protocol !== "https:") {
-      location.href = "https://" + location.host + location.pathname + location.search;
-    }
-  </script>
+<script>
+if (location.protocol !== "https:") {
+location.href = "https://" + location.host + location.pathname + location.search;
+}
+</script>
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6596385917043322"
-    crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
 
-  <style>
+<style>
 
-    /* ===== منع التحديد والنسخ عبر CSS ===== */
-    *{
-      -webkit-user-select:none;
-      -moz-user-select:none;
-      -ms-user-select:none;
-      user-select:none;
-      -webkit-user-drag:none;
-    }
+/* منع النسخ */
+*{
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+-webkit-user-drag:none;
+}
 
-    ::selection{
-      background:transparent;
-    }
+::selection{background:transparent;}
+::-moz-selection{background:transparent;}
 
-    ::-moz-selection{
-      background:transparent;
-    }
+:root{
+--bg:#0e0f12;
+--card:#15171b;
+--muted:#9aa3b2;
+--text:#e9edf3;
+--accent:#22d3ee;
+--line:#2a2f39;
+}
 
-    :root{
-      --bg:#0e0f12; --card:#15171b; --muted:#9aa3b2;
-      --text:#e9edf3; --accent:#22d3ee; --line:#2a2f39;
-    }
+*{box-sizing:border-box}
 
-    *{box-sizing:border-box}
+body{
+margin:0;
+background:radial-gradient(1200px 800px at 80% -20%, #1b1f28 0%, #0e0f12 55%) fixed;
+color:var(--text);
+font-family:"Tajawal",sans-serif;
+line-height:1.7;
+padding:0 16px 60px;
+}
 
-    body{
-      margin:0;
-      background:radial-gradient(1200px 800px at 80% -20%, #1b1f28 0%, #0e0f12 55%) fixed;
-      color:var(--text);
-      font-family:"Tajawal",sans-serif;
-      line-height:1.7;
-      padding:0 16px 60px;
-    }
+.wrap{
+max-width:980px;
+margin:auto;
+}
 
-    .wrap{max-width:980px;margin:auto;}
+.topbar{
+background:#15171b;
+border-bottom:1px solid var(--line);
+padding:12px 18px;
+text-align:center;
+font-weight:700;
+font-size:20px;
+color:var(--accent);
+box-shadow:0 4px 20px rgba(0,0,0,.3);
+position:sticky;
+top:0;
+z-index:1000;
+}
 
-    .topbar{
-      background:#15171b;border-bottom:1px solid var(--line);
-      padding:12px 18px;text-align:center;font-weight:700;
-      font-size:20px;color:var(--accent);
-      box-shadow:0 4px 20px rgba(0,0,0,.3);
-      position:sticky;top:0;z-index:1000;
-    }
+.ticker{
+margin-top:10px;
+background:rgba(21,23,27,.9);
+border:1px solid var(--line);
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
 
-    .ticker{
-      margin-top:10px;
-      background:rgba(21,23,27,.9);
-      border:1px solid var(--line);
-      border-radius:16px;
-      overflow:hidden;
-      box-shadow:0 6px 18px rgba(0,0,0,.25);
-    }
+.ticker__track{
+position:relative;
+height:44px;
+display:flex;
+align-items:center;
+overflow:hidden;
+}
 
-    .ticker__track{
-      position:relative;
-      height:44px;
-      display:flex;
-      align-items:center;
-      overflow:hidden;
-    }
+.ticker__text{
+display:block;
+width:100%;
+text-align:center;
+white-space:normal;
+padding:0 18px;
+font-weight:700;
+color:var(--text);
+}
 
-    .ticker__text{
-      display:block;
-      width:100%;
-      text-align:center;
-      white-space:normal;
-      padding:0 18px;
-      font-weight:700;
-      color:var(--text);
-      animation:none !important;
-    }
+header{
+background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+border:1px solid var(--line);
+border-radius:20px;
+padding:20px;
+margin-top:20px;
+margin-bottom:18px;
+box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04);
+text-align:center;
+}
 
-    header{
-      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:20px;margin-top:20px;margin-bottom:18px;
-      box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04);
-      text-align:center;
-    }
+h1{
+margin:0;
+font-weight:800;
+font-size:26px;
+}
 
-    h1{margin:0;font-weight:800;font-size:26px}
+.card{
+background:var(--card);
+border:1px solid var(--line);
+border-radius:18px;
+padding:16px;
+margin-top:14px;
+}
 
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px;
-      margin-top:14px
-    }
+h2{
+margin-top:0;
+color:var(--accent);
+font-size:18px;
+}
 
-    h2{margin-top:0;color:var(--accent);font-size:18px}
+ul{
+margin:0;
+padding:0;
+list-style:none;
+}
 
-    ul{margin:0;padding:0;list-style:none}
+li{
+border-top:1px dashed var(--line);
+padding:8px 4px;
+}
 
-    li{border-top:1px dashed var(--line);padding:8px 4px}
-    li:first-child{border-top:none}
+li:first-child{
+border-top:none;
+}
 
-    footer{text-align:center;margin-top:24px;color:var(--muted);font-size:13px}
+footer{
+text-align:center;
+margin-top:24px;
+color:var(--muted);
+font-size:13px;
+}
 
-    .join-btn{
-      display:inline-block;background:var(--accent);color:#000;text-decoration:none;
-      font-weight:700;padding:10px 20px;border-radius:12px;margin-top:10px;
-    }
+.join-btn{
+display:inline-block;
+background:var(--accent);
+color:#000;
+text-decoration:none;
+font-weight:700;
+padding:10px 20px;
+border-radius:12px;
+margin-top:10px;
+}
 
-    .nazar-card{
-      background:var(--card);border:1px solid var(--line);
-      border-radius:18px;padding:16px;margin-top:25px;text-align:center;
-    }
+.nazar-card{
+background:var(--card);
+border:1px solid var(--line);
+border-radius:18px;
+padding:16px;
+margin-top:25px;
+text-align:center;
+}
 
-    .nazar-card img{
-      width:100%;max-width:480px;border-radius:12px;
-      border:1px solid var(--line);margin-top:10px;
-      box-shadow:0 4px 15px rgba(0,0,0,.4);
-    }
+.nazar-card img{
+width:100%;
+max-width:480px;
+border-radius:12px;
+border:1px solid var(--line);
+margin-top:10px;
+box-shadow:0 4px 15px rgba(0,0,0,.4);
+}
 
-  </style>
+</style>
 </head>
 
 <body>
 
-  <div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
+<div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
 
-  <div class="ticker" id="ticker">
-    <div class="ticker__track" id="tickerTrack">
-      <span class="ticker__text" id="tickerText">⏳ جاري تحميل التنبيه...</span>
-    </div>
-  </div>
+<div class="ticker" id="ticker">
+<div class="ticker__track">
+<span class="ticker__text" id="tickerText">⏳ جاري تحميل التنبيه...</span>
+</div>
+</div>
 
-  <div class="wrap">
+<div class="wrap">
 
-    <header>
-      <h1>التحديات اليومية ريد ديد</h1>
-    </header>
+<header>
+<h1>التحديات اليومية ريد ديد</h1>
+</header>
 
-    <div id="challenges">⏳ جاري تحميل التحديات...</div>
+<div id="challenges">⏳ جاري تحميل التحديات...</div>
 
-    <div class="nazar-card" id="nazar">
-      <h2>📍 موقع مدام نزار </h2>
-      <p>⏳ جاري تحميل الصورة...</p>
-    </div>
+<div class="nazar-card" id="nazar">
+<h2>📍 موقع مدام نزار</h2>
+<p>⏳ جاري تحميل الصورة...</p>
+</div>
 
-    <footer>
-      <p><b>💠 الموقع خاص بالتحديات اليومية ريد ديد 2 | برمجة العسيري 💠</b></p>
+<footer>
 
-      <a class="join-btn" href="https://youtube.com/@tx66w?si=Q9dp9rsgmO42-ZpD" target="_blank">
-        YouTube
-      </a>
+<p><b>💠 الموقع خاص بالتحديات اليومية ريد ديد 2 | برمجة العسيري 💠</b></p>
 
-      <a class="join-btn" href="https://www.tiktok.com/@tx66w?_r=1&_t=ZS-913ywV8b5az" target="_blank">
-        TikTok
-      </a>
+<a class="join-btn" href="https://youtube.com/@tx66w" target="_blank">
+YouTube
+</a>
 
-    </footer>
+<a class="join-btn" href="https://www.tiktok.com/@tx66w" target="_blank">
+TikTok
+</a>
 
-  </div>
+</footer>
+
+</div>
 
 <script>
 
-/* ===== منع النسخ والاختصارات ===== */
+/* منع النسخ */
 
-document.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu",e=>e.preventDefault());
+document.addEventListener("copy",e=>e.preventDefault());
+document.addEventListener("cut",e=>e.preventDefault());
+document.addEventListener("paste",e=>e.preventDefault());
+document.addEventListener("dragstart",e=>e.preventDefault());
 
-document.addEventListener("copy", e => e.preventDefault());
-document.addEventListener("cut", e => e.preventDefault());
-document.addEventListener("paste", e => e.preventDefault());
+document.addEventListener("keydown",function(e){
 
-document.addEventListener("dragstart", e => e.preventDefault());
+if(
+e.key==="F12" ||
+(e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase())) ||
+(e.ctrlKey && ["U","S","A","C","X","V"].includes(e.key.toUpperCase()))
+){
+e.preventDefault();
+alert("🚫 لا يمكن نسخ محتوى هذه الصفحة");
+}
 
-document.addEventListener("keydown", function(e){
+});
 
-  if(
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase())) ||
-    (e.ctrlKey && ["U","S","A","C","X","V"].includes(e.key.toUpperCase()))
-  ){
-      e.preventDefault();
-      alert("🚫 لا يمكن نسخ محتوى هذه الصفحة");
-  }
+
+/* التنبيه العلوي */
+
+let tickerLines=[];
+let tickerIndex=0;
+
+function showNextLine(){
+if(!tickerLines.length) return;
+
+document.getElementById("tickerText").textContent=tickerLines[tickerIndex];
+
+tickerIndex=(tickerIndex+1)%tickerLines.length;
+}
+
+fetch("ticker.txt?"+Date.now())
+.then(r=>r.text())
+.then(text=>{
+
+tickerLines=text.split(/\r?\n/)
+.map(l=>l.trim())
+.filter(Boolean);
+
+if(!tickerLines.length){
+document.getElementById("ticker").style.display="none";
+return;
+}
+
+showNextLine();
+
+setInterval(showNextLine,5000);
+
+})
+.catch(()=>{
+document.getElementById("ticker").style.display="none";
+});
+
+
+/* التحديات اليومية */
+
+fetch("font-size.txt?"+Date.now())
+.then(r=>r.text())
+.then(text=>{
+
+const lines=text.trim().split(/\r?\n/);
+
+const firstLine=lines[0];
+
+document.getElementById("topdate").innerHTML=
+`📅 <b>تاريخ التحديث:</b> ${firstLine}`;
+
+lines.shift();
+
+let html="";
+let currentSection="";
+
+lines.forEach(line=>{
+
+if(!line.trim()) return;
+
+if(!line.match(/^0|^\$/)){
+
+if(currentSection){
+html+="</ul></div>";
+}
+
+currentSection=line.trim();
+
+html+=`<div class="card"><h2>${currentSection}</h2><ul>`;
+}
+
+else{
+
+html+=`<li>${line}</li>`;
+
+}
+
+});
+
+if(currentSection){
+html+="</ul></div>";
+}
+
+document.getElementById("challenges").innerHTML=html;
+
+})
+.catch(()=>{
+
+document.getElementById("challenges").innerHTML=
+"❌ حدث خطأ أثناء تحميل التحديات.";
+
+});
+
+
+/* صورة مدام نزار */
+
+function renderNazar(imgUrl){
+
+document.getElementById("nazar").innerHTML=
+`<h2>📍 موقع مدام نزار</h2>
+<img src="${imgUrl}" alt="Madam Nazar Location">`;
+
+}
+
+fetch("nazar.txt?"+Date.now())
+.then(r=>r.text())
+.then(text=>{
+
+const url=text.trim().split(/\r?\n/)[0];
+
+if(!url){
+document.getElementById("nazar").innerHTML="<p>❌ لم يتم العثور على الصورة</p>";
+return;
+}
+
+renderNazar(url);
+
+})
+.catch(()=>{
+
+document.getElementById("nazar").innerHTML="<p>❌ تعذر تحميل الصورة</p>";
 
 });
 
