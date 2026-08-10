@@ -5,7 +5,7 @@
 0/1 اصطد سمكة Lake Sturgeon
 0/5 اقطف نبتة Blackberries
 0/5 اقطف نبتة Yarrow
-0/3 اقتل لاعب بسلاح يومي في Showdowns
+0/3 اقتل لاعب بسلاح يرمى في Showdowns
 0/1 زر منطقة Cotorra springs
 🔴 الباونتي هنتر (Bounty Hunter)
 0/2 اكمل مهمة باونتي مع احد افراد العصابة
