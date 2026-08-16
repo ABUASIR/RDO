@@ -2,369 +2,1808 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta name="theme-color" content="#090b0f">
+
 <title>🎯 التحديات اليومية ريد ديد اونلاين</title>
 
 <script>
-if (location.protocol !== "https:") {
-location.href = "https://" + location.host + location.pathname + location.search;
+if (location.protocol !== "https:" && location.hostname !== "localhost") {
+    location.href =
+        "https://" +
+        location.host +
+        location.pathname +
+        location.search +
+        location.hash;
 }
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap"
+    rel="stylesheet"
+>
 
 <style>
 
-/* منع النسخ */
-*{
--webkit-user-select:none;
--moz-user-select:none;
--ms-user-select:none;
-user-select:none;
--webkit-user-drag:none;
-}
-
-::selection{background:transparent;}
-::-moz-selection{background:transparent;}
+/* =========================================
+   المتغيرات العامة
+========================================= */
 
 :root{
---bg:#0e0f12;
---card:#15171b;
---muted:#9aa3b2;
---text:#e9edf3;
---accent:#22d3ee;
---line:#2a2f39;
+    --bg:#090b0f;
+    --bg-soft:#0f1218;
+
+    --card:rgba(20,23,30,.92);
+    --card-2:rgba(16,19,25,.96);
+
+    --text:#f3f6fb;
+    --text-soft:#d6dbe4;
+
+    --muted:#98a2b3;
+
+    --accent:#16d9f5;
+    --accent-2:#0cb8d0;
+
+    --accent-soft:rgba(22,217,245,.10);
+
+    --line:rgba(255,255,255,.08);
+
+    --success:#42d392;
+    --warning:#ffb020;
+    --danger:#ff4567;
+
+    --radius:24px;
+
+    --shadow:
+        0 18px 50px rgba(0,0,0,.35);
+
+    --shadow-soft:
+        0 10px 30px rgba(0,0,0,.25);
 }
 
-*{box-sizing:border-box}
+
+/* =========================================
+   منع النسخ والتحديد
+========================================= */
+
+*{
+    box-sizing:border-box;
+
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+
+    -webkit-user-drag:none;
+}
+
+::selection{
+    background:transparent;
+}
+
+::-moz-selection{
+    background:transparent;
+}
+
+
+/* =========================================
+   الصفحة
+========================================= */
+
+html{
+    scroll-behavior:smooth;
+}
 
 body{
-margin:0;
-background:radial-gradient(1200px 800px at 80% -20%, #1b1f28 0%, #0e0f12 55%) fixed;
-color:var(--text);
-font-family:"Tajawal",sans-serif;
-line-height:1.7;
-padding:0 16px 60px;
+    margin:0;
+
+    min-height:100vh;
+
+    background:
+        radial-gradient(
+            900px 600px at 80% -5%,
+            rgba(22,217,245,.13),
+            transparent 55%
+        ),
+        radial-gradient(
+            700px 500px at 5% 20%,
+            rgba(79,70,229,.07),
+            transparent 55%
+        ),
+        linear-gradient(
+            180deg,
+            #0b0d11,
+            #08090c
+        );
+
+    background-attachment:fixed;
+
+    color:var(--text);
+
+    font-family:"Tajawal",sans-serif;
+
+    line-height:1.8;
+
+    padding:
+        0
+        14px
+        calc(55px + env(safe-area-inset-bottom));
 }
+
+
+/* =========================================
+   الحاوية الرئيسية
+========================================= */
 
 .wrap{
-max-width:980px;
-margin:auto;
+    width:100%;
+    max-width:900px;
+    margin:auto;
 }
+
+
+/* =========================================
+   شريط التاريخ
+========================================= */
 
 .topbar{
-background:#15171b;
-border-bottom:1px solid var(--line);
-padding:12px 18px;
-text-align:center;
-font-weight:700;
-font-size:20px;
-color:var(--accent);
-box-shadow:0 4px 20px rgba(0,0,0,.3);
-position:sticky;
-top:0;
-z-index:1000;
+    width:100%;
+    max-width:900px;
+
+    margin:auto;
+
+    padding:
+        calc(12px + env(safe-area-inset-top))
+        18px
+        12px;
+
+    text-align:center;
+
+    font-size:clamp(16px,4vw,21px);
+    font-weight:800;
+
+    color:var(--accent);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(18,21,28,.95),
+            rgba(13,16,22,.92)
+        );
+
+    border-left:1px solid var(--line);
+    border-right:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.25);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    position:sticky;
+    top:0;
+    z-index:1000;
 }
 
+
+/* =========================================
+   شريط التنبيه
+========================================= */
+
 .ticker{
-margin-top:10px;
-background:rgba(21,23,27,.9);
-border:1px solid var(--line);
-border-radius:16px;
-overflow:hidden;
-box-shadow:0 6px 18px rgba(0,0,0,.25);
+    width:100%;
+    max-width:900px;
+
+    margin:14px auto 0;
+
+    overflow:hidden;
+
+    border:1px solid var(--line);
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(21,24,31,.92),
+            rgba(15,18,24,.92)
+        );
+
+    box-shadow:
+        0 10px 32px rgba(0,0,0,.25);
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
 }
 
 .ticker__track{
-position:relative;
-height:44px;
-display:flex;
-align-items:center;
-overflow:hidden;
+    min-height:52px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
 .ticker__text{
-display:block;
-width:100%;
-text-align:center;
-white-space:normal;
-padding:0 18px;
-font-weight:700;
-color:var(--text);
+    display:block;
+
+    width:100%;
+
+    padding:11px 20px;
+
+    text-align:center;
+
+    font-size:clamp(14px,3.2vw,17px);
+    font-weight:700;
+
+    color:#e6ebf3;
+
+    transition:
+        opacity .25s ease,
+        transform .25s ease;
 }
 
+
+/* =========================================
+   الهيدر
+========================================= */
+
 header{
-background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-border:1px solid var(--line);
-border-radius:20px;
-padding:20px;
-margin-top:20px;
-margin-bottom:18px;
-box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04);
-text-align:center;
+    position:relative;
+
+    overflow:hidden;
+
+    margin-top:22px;
+    margin-bottom:20px;
+
+    padding:30px 20px;
+
+    text-align:center;
+
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.015)
+        );
+
+    box-shadow:var(--shadow);
+}
+
+header::before{
+    content:"";
+
+    position:absolute;
+
+    width:320px;
+    height:320px;
+
+    top:-210px;
+    right:50%;
+
+    transform:translateX(50%);
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(22,217,245,.16),
+            transparent 70%
+        );
+
+    pointer-events:none;
+}
+
+header::after{
+    content:"";
+
+    position:absolute;
+
+    left:20%;
+    right:20%;
+    bottom:0;
+
+    height:1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(22,217,245,.45),
+            transparent
+        );
 }
 
 h1{
-margin:0;
-font-weight:800;
-font-size:26px;
+    position:relative;
+    z-index:1;
+
+    margin:0;
+
+    font-size:clamp(27px,6vw,40px);
+    font-weight:800;
+
+    letter-spacing:-.4px;
+
+    color:#f7f9fc;
+
+    text-shadow:
+        0 3px 18px rgba(0,0,0,.35);
 }
 
+.header-subtitle{
+    position:relative;
+    z-index:1;
+
+    margin:5px 0 0;
+
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+
+/* =========================================
+   مكان التحديات
+========================================= */
+
+#challenges{
+    width:100%;
+}
+
+
+/* =========================================
+   بطاقات الأقسام
+========================================= */
+
 .card{
-background:var(--card);
-border:1px solid var(--line);
-border-radius:18px;
-padding:16px;
-margin-top:14px;
+    position:relative;
+
+    overflow:hidden;
+
+    margin-top:18px;
+
+    padding:20px 21px;
+
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24,27,35,.95),
+            rgba(15,18,24,.97)
+        );
+
+    box-shadow:
+        0 16px 42px rgba(0,0,0,.27),
+        inset 0 1px rgba(255,255,255,.035);
+
+    animation:
+        cardIn .42s ease both;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.card:hover{
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(22,217,245,.20);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.33),
+        inset 0 1px rgba(255,255,255,.04);
+}
+
+.card::before{
+    content:"";
+
+    position:absolute;
+
+    top:-70px;
+    right:-70px;
+
+    width:180px;
+    height:180px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(22,217,245,.09),
+            transparent 70%
+        );
+
+    pointer-events:none;
+}
+
+@keyframes cardIn{
+
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* =========================================
+   عنوان القسم
+========================================= */
+
+.card-title-row{
+    position:relative;
+    z-index:1;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:12px;
+
+    margin-bottom:13px;
 }
 
 h2{
-margin-top:0;
-color:var(--accent);
-font-size:18px;
+    margin:0;
+
+    font-size:clamp(20px,4vw,27px);
+    font-weight:800;
+
+    color:var(--accent);
+
+    unicode-bidi:plaintext;
 }
 
+.challenge-count{
+    flex-shrink:0;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    font-size:12px;
+    font-weight:700;
+
+    color:var(--accent);
+
+    background:var(--accent-soft);
+
+    border:
+        1px solid rgba(22,217,245,.15);
+}
+
+
+/* =========================================
+   قائمة التحديات
+========================================= */
+
 ul{
-margin:0;
-padding:0;
-list-style:none;
+    position:relative;
+    z-index:1;
+
+    margin:0;
+    padding:0;
+
+    list-style:none;
 }
 
 li{
-border-top:1px dashed var(--line);
-padding:8px 4px;
+    position:relative;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:15px;
+
+    min-height:55px;
+
+    padding:12px 10px;
+
+    border-top:
+        1px solid rgba(255,255,255,.065);
+
+    color:var(--text-soft);
+
+    font-size:clamp(16px,3.4vw,20px);
+
+    transition:
+        background .18s ease,
+        padding .18s ease,
+        color .18s ease;
 }
 
 li:first-child{
-border-top:none;
+    border-top:none;
 }
 
-footer{
-text-align:center;
-margin-top:24px;
-color:var(--muted);
-font-size:13px;
+li:hover{
+    background:
+        rgba(255,255,255,.025);
+
+    padding-right:15px;
+
+    color:#fff;
 }
 
-.join-btn{
-display:inline-block;
-background:var(--accent);
-color:#000;
-text-decoration:none;
-font-weight:700;
-padding:10px 20px;
-border-radius:12px;
-margin-top:10px;
+.challenge-text{
+    flex:1;
+
+    min-width:0;
+
+    unicode-bidi:plaintext;
 }
+
+.challenge-progress{
+    flex-shrink:0;
+
+    min-width:48px;
+
+    padding:3px 8px;
+
+    text-align:center;
+
+    border-radius:999px;
+
+    font-size:13px;
+    font-weight:800;
+
+    color:#dffaff;
+
+    background:
+        rgba(22,217,245,.08);
+
+    border:
+        1px solid rgba(22,217,245,.12);
+}
+
+
+/* =========================================
+   بطاقة مدام نزار
+========================================= */
 
 .nazar-card{
-background:var(--card);
-border:1px solid var(--line);
-border-radius:18px;
-padding:16px;
-margin-top:25px;
-text-align:center;
+    position:relative;
+
+    overflow:hidden;
+
+    margin-top:24px;
+
+    padding:20px;
+
+    text-align:center;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:
+        var(--radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24,27,35,.95),
+            rgba(15,18,24,.97)
+        );
+
+    box-shadow:
+        var(--shadow);
+}
+
+.nazar-card::before{
+    content:"";
+
+    position:absolute;
+
+    width:230px;
+    height:230px;
+
+    top:-140px;
+    right:-100px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(22,217,245,.08),
+            transparent 70%
+        );
+
+    pointer-events:none;
+}
+
+.nazar-card h2{
+    position:relative;
+    z-index:1;
+
+    text-align:center;
+
+    margin-bottom:5px;
+}
+
+.nazar-card p{
+    color:var(--muted);
 }
 
 .nazar-card img{
-width:100%;
-max-width:480px;
-border-radius:12px;
-border:1px solid var(--line);
-margin-top:10px;
-box-shadow:0 4px 15px rgba(0,0,0,.4);
+    position:relative;
+    z-index:1;
+
+    display:block;
+
+    width:100%;
+    max-width:650px;
+
+    margin:15px auto 0;
+
+    border-radius:18px;
+
+    border:
+        1px solid var(--line);
+
+    box-shadow:
+        0 16px 40px rgba(0,0,0,.38);
+
+    object-fit:cover;
+}
+
+
+/* =========================================
+   الفوتر
+========================================= */
+
+footer{
+    text-align:center;
+
+    margin-top:36px;
+
+    color:var(--muted);
+
+    font-size:14px;
+}
+
+footer p{
+    margin-bottom:16px;
+}
+
+.footer-title{
+    color:#ccd3de;
+}
+
+
+/* =========================================
+   أزرار التواصل
+========================================= */
+
+.social-buttons{
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:10px;
+}
+
+.join-btn{
+    display:inline-flex;
+
+    justify-content:center;
+    align-items:center;
+
+    min-width:130px;
+
+    padding:11px 18px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-size:15px;
+    font-weight:800;
+
+    color:#061014;
+
+    background:
+        linear-gradient(
+            135deg,
+            #20dff7,
+            #0cbcd5
+        );
+
+    box-shadow:
+        0 10px 25px rgba(22,217,245,.14);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease;
+}
+
+.join-btn:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 14px 32px rgba(22,217,245,.22);
+
+    filter:brightness(1.05);
+}
+
+.join-btn:active{
+    transform:scale(.97);
+}
+
+
+/* =========================================
+   شاشة التحميل
+========================================= */
+
+.loading{
+    padding:35px 20px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-weight:700;
+}
+
+.error-message{
+    padding:25px;
+
+    border:
+        1px solid rgba(255,69,103,.15);
+
+    border-radius:18px;
+
+    background:
+        rgba(255,69,103,.055);
+
+    color:#ff90a3;
+
+    text-align:center;
+}
+
+
+/* =========================================
+   تحسين الجوال
+========================================= */
+
+@media (max-width:600px){
+
+    body{
+        padding-left:10px;
+        padding-right:10px;
+    }
+
+    .topbar{
+        padding-left:8px;
+        padding-right:8px;
+    }
+
+    .ticker{
+        border-radius:17px;
+    }
+
+    header{
+        margin-top:17px;
+
+        padding:24px 14px;
+
+        border-radius:20px;
+    }
+
+    .card{
+        padding:17px 14px;
+
+        border-radius:20px;
+    }
+
+    .card-title-row{
+        align-items:flex-start;
+    }
+
+    .challenge-count{
+        margin-top:3px;
+    }
+
+    li{
+        gap:10px;
+
+        min-height:51px;
+
+        padding-top:10px;
+        padding-bottom:10px;
+    }
+
+    .challenge-progress{
+        min-width:44px;
+
+        font-size:12px;
+    }
+
+    .nazar-card{
+        padding:15px;
+
+        border-radius:20px;
+    }
+
+    .nazar-card img{
+        border-radius:15px;
+    }
+
+    .join-btn{
+        min-width:120px;
+    }
+
+}
+
+
+/* =========================================
+   الأجهزة الصغيرة جدًا
+========================================= */
+
+@media (max-width:380px){
+
+    .card-title-row{
+        gap:7px;
+    }
+
+    h2{
+        font-size:19px;
+    }
+
+    li{
+        font-size:15px;
+    }
+
+    .challenge-count{
+        font-size:11px;
+    }
+
+}
+
+
+/* =========================================
+   تقليل الحركة لمن يطلب ذلك
+========================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+
+        transition-duration:.01ms !important;
+
+        scroll-behavior:auto !important;
+    }
+
 }
 
 </style>
 </head>
 
+
 <body>
 
-<div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
+<div
+    class="topbar"
+    id="topdate"
+>
+    📅 جاري تحميل آخر تحديث...
+</div>
 
-<div class="ticker" id="ticker">
-<div class="ticker__track">
-<span class="ticker__text" id="tickerText">⏳ جاري تحميل التنبيه...</span>
+
+<div
+    class="ticker"
+    id="ticker"
+>
+    <div class="ticker__track">
+
+        <span
+            class="ticker__text"
+            id="tickerText"
+        >
+            ⏳ جاري تحميل التنبيه...
+        </span>
+
+    </div>
 </div>
-</div>
+
 
 <div class="wrap">
 
-<header>
-<h1>التحديات اليومية ريد ديد</h1>
-</header>
+    <header>
 
-<div id="challenges">⏳ جاري تحميل التحديات...</div>
+        <h1>
+            التحديات اليومية ريد ديد
+        </h1>
 
-<div class="nazar-card" id="nazar">
-<h2>📍 موقع مدام نزار</h2>
-<p>⏳ جاري تحميل الصورة...</p>
+        <p class="header-subtitle">
+            Red Dead Online Daily Challenges
+        </p>
+
+    </header>
+
+
+    <div
+        id="challenges"
+        class="loading"
+    >
+        ⏳ جاري تحميل التحديات...
+    </div>
+
+
+    <div
+        class="nazar-card"
+        id="nazar"
+    >
+
+        <h2>
+            📍 موقع مدام نزار
+        </h2>
+
+        <p>
+            ⏳ جاري تحميل الصورة...
+        </p>
+
+    </div>
+
+
+    <footer>
+
+        <p class="footer-title">
+            <b>
+                💠 الموقع خاص بالتحديات اليومية
+                ريد ديد 2 | برمجة العسيري 💠
+            </b>
+        </p>
+
+
+        <div class="social-buttons">
+
+            <a
+                class="join-btn"
+                href="https://youtube.com/@tx66w"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                YouTube
+            </a>
+
+
+            <a
+                class="join-btn"
+                href="https://www.tiktok.com/@tx66w"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                TikTok
+            </a>
+
+        </div>
+
+    </footer>
+
 </div>
 
-<footer>
-
-<p><b>💠 الموقع خاص بالتحديات اليومية ريد ديد 2 | برمجة العسيري 💠</b></p>
-
-<a class="join-btn" href="https://youtube.com/@tx66w" target="_blank">
-YouTube
-</a>
-
-<a class="join-btn" href="https://www.tiktok.com/@tx66w" target="_blank">
-TikTok
-</a>
-
-</footer>
-
-</div>
 
 <script>
 
-/* منع النسخ */
+/* =========================================
+   منع النسخ والزر الأيمن والسحب
+========================================= */
 
-document.addEventListener("contextmenu",e=>e.preventDefault());
-document.addEventListener("copy",e=>e.preventDefault());
-document.addEventListener("cut",e=>e.preventDefault());
-document.addEventListener("paste",e=>e.preventDefault());
-document.addEventListener("dragstart",e=>e.preventDefault());
+document.addEventListener(
+    "contextmenu",
+    function(e){
+        e.preventDefault();
+    }
+);
 
-document.addEventListener("keydown",function(e){
 
-if(
-e.key==="F12" ||
-(e.ctrlKey && e.shiftKey && ["I","J","C"].includes(e.key.toUpperCase())) ||
-(e.ctrlKey && ["U","S","A","C","X","V"].includes(e.key.toUpperCase()))
-){
-e.preventDefault();
-alert("🚫 لا يمكن نسخ محتوى هذه الصفحة");
+document.addEventListener(
+    "copy",
+    function(e){
+        e.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "cut",
+    function(e){
+        e.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "paste",
+    function(e){
+        e.preventDefault();
+    }
+);
+
+
+document.addEventListener(
+    "dragstart",
+    function(e){
+        e.preventDefault();
+    }
+);
+
+
+/* =========================================
+   منع الاختصارات الشائعة
+========================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        const key =
+            e.key.toUpperCase();
+
+        const blockedCtrlKeys =
+            [
+                "U",
+                "S",
+                "A",
+                "C",
+                "X",
+                "V"
+            ];
+
+        const blockedDevToolsKeys =
+            [
+                "I",
+                "J",
+                "C"
+            ];
+
+
+        const isF12 =
+            e.key === "F12";
+
+
+        const isDevToolsShortcut =
+            e.ctrlKey &&
+            e.shiftKey &&
+            blockedDevToolsKeys.includes(key);
+
+
+        const isCtrlShortcut =
+            e.ctrlKey &&
+            blockedCtrlKeys.includes(key);
+
+
+        if(
+            isF12 ||
+            isDevToolsShortcut ||
+            isCtrlShortcut
+        ){
+
+            e.preventDefault();
+
+            alert(
+                "🚫 لا يمكن نسخ محتوى هذه الصفحة"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   دالة تنظيف النص قبل وضعه داخل HTML
+========================================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
 }
 
-});
 
+/* =========================================
+   التنبيه العلوي
+========================================= */
 
-/* التنبيه العلوي */
+let tickerLines = [];
 
-let tickerLines=[];
-let tickerIndex=0;
+let tickerIndex = 0;
+
+let tickerTimer = null;
+
 
 function showNextLine(){
-if(!tickerLines.length) return;
 
-document.getElementById("tickerText").textContent=tickerLines[tickerIndex];
+    if(!tickerLines.length){
+        return;
+    }
 
-tickerIndex=(tickerIndex+1)%tickerLines.length;
+
+    const tickerText =
+        document.getElementById(
+            "tickerText"
+        );
+
+
+    tickerText.style.opacity =
+        "0";
+
+
+    tickerText.style.transform =
+        "translateY(5px)";
+
+
+    setTimeout(
+        function(){
+
+            tickerText.textContent =
+                tickerLines[tickerIndex];
+
+
+            tickerIndex =
+                (tickerIndex + 1) %
+                tickerLines.length;
+
+
+            tickerText.style.opacity =
+                "1";
+
+
+            tickerText.style.transform =
+                "translateY(0)";
+
+        },
+        220
+    );
+
 }
 
-fetch("ticker.txt?"+Date.now())
-.then(r=>r.text())
-.then(text=>{
 
-tickerLines=text.split(/\r?\n/)
-.map(l=>l.trim())
-.filter(Boolean);
+/* تحميل ticker.txt */
 
-if(!tickerLines.length){
-document.getElementById("ticker").style.display="none";
-return;
-}
+fetch(
+    "ticker.txt?v=" +
+    Date.now(),
+    {
+        cache:"no-store"
+    }
+)
 
-showNextLine();
+.then(function(response){
 
-setInterval(showNextLine,5000);
+    if(!response.ok){
+
+        throw new Error(
+            "Ticker request failed"
+        );
+
+    }
+
+    return response.text();
 
 })
-.catch(()=>{
-document.getElementById("ticker").style.display="none";
-});
+
+.then(function(text){
+
+    tickerLines =
+        text
+        .split(/\r?\n/)
+        .map(function(line){
+
+            return line.trim();
+
+        })
+        .filter(Boolean);
 
 
-/* التحديات اليومية */
+    if(!tickerLines.length){
 
-fetch("font-size.txt?"+Date.now())
-.then(r=>r.text())
-.then(text=>{
+        document
+        .getElementById("ticker")
+        .style.display =
+            "none";
 
-const lines=text.trim().split(/\r?\n/);
+        return;
+    }
 
-const firstLine=lines[0];
 
-document.getElementById("topdate").innerHTML=
-`📅 <b>تاريخ التحديث:</b> ${firstLine}`;
+    showNextLine();
 
-lines.shift();
 
-let html="";
-let currentSection="";
+    if(tickerTimer){
 
-lines.forEach(line=>{
+        clearInterval(
+            tickerTimer
+        );
 
-if(!line.trim()) return;
+    }
 
-if(!line.match(/^0|^\$/)){
 
-if(currentSection){
-html+="</ul></div>";
-}
-
-currentSection=line.trim();
-
-html+=`<div class="card"><h2>${currentSection}</h2><ul>`;
-}
-
-else{
-
-html+=`<li>${line}</li>`;
-
-}
-
-});
-
-if(currentSection){
-html+="</ul></div>";
-}
-
-document.getElementById("challenges").innerHTML=html;
+    tickerTimer =
+        setInterval(
+            showNextLine,
+            5000
+        );
 
 })
-.catch(()=>{
 
-document.getElementById("challenges").innerHTML=
-"❌ حدث خطأ أثناء تحميل التحديات.";
+.catch(function(){
+
+    document
+    .getElementById("ticker")
+    .style.display =
+        "none";
 
 });
 
 
-/* صورة مدام نزار */
+/* =========================================
+   استخراج التقدم
+   مثال:
+   0/3 اسلخ طير
+   يصبح:
+   progress = 0/3
+   text = اسلخ طير
+========================================= */
 
-function renderNazar(imgUrl){
+function parseChallengeLine(line){
 
-document.getElementById("nazar").innerHTML=
-`<h2>📍 موقع مدام نزار</h2>
-<img src="${imgUrl}" alt="Madam Nazar Location">`;
+    const match =
+        line.match(
+            /^(\d+\s*\/\s*\d+)\s*(.*)$/
+        );
+
+
+    if(match){
+
+        return {
+
+            progress:
+                match[1]
+                .replace(/\s+/g,""),
+
+            text:
+                match[2].trim()
+
+        };
+
+    }
+
+
+    return {
+
+        progress:"",
+
+        text:line.trim()
+
+    };
 
 }
 
-fetch("nazar.txt?"+Date.now())
-.then(r=>r.text())
-.then(text=>{
 
-const url=text.trim().split(/\r?\n/)[0];
+/* =========================================
+   تحديد ما إذا كان السطر تحدي
+========================================= */
 
-if(!url){
-document.getElementById("nazar").innerHTML="<p>❌ لم يتم العثور على الصورة</p>";
-return;
+function isChallengeLine(line){
+
+    return /^\d+\s*\/\s*\d+/.test(
+        line.trim()
+    );
+
 }
 
-renderNazar(url);
+
+/* =========================================
+   بناء بطاقة قسم
+========================================= */
+
+function createSectionHTML(
+    title,
+    challenges
+){
+
+    const safeTitle =
+        escapeHTML(title);
+
+
+    let itemsHTML = "";
+
+
+    challenges.forEach(
+        function(line){
+
+            const challenge =
+                parseChallengeLine(line);
+
+
+            const safeText =
+                escapeHTML(
+                    challenge.text
+                );
+
+
+            const safeProgress =
+                escapeHTML(
+                    challenge.progress
+                );
+
+
+            itemsHTML += `
+                <li>
+
+                    <span class="challenge-text">
+                        ${safeText}
+                    </span>
+
+                    ${
+                        safeProgress
+                        ?
+                        `
+                        <span class="challenge-progress">
+                            ${safeProgress}
+                        </span>
+                        `
+                        :
+                        ""
+                    }
+
+                </li>
+            `;
+
+        }
+    );
+
+
+    return `
+        <div class="card">
+
+            <div class="card-title-row">
+
+                <h2>
+                    ${safeTitle}
+                </h2>
+
+                <span class="challenge-count">
+                    ${challenges.length}
+                    تحديات
+                </span>
+
+            </div>
+
+            <ul>
+                ${itemsHTML}
+            </ul>
+
+        </div>
+    `;
+
+}
+
+
+/* =========================================
+   التحديات اليومية
+========================================= */
+
+fetch(
+    "font-size.txt?v=" +
+    Date.now(),
+    {
+        cache:"no-store"
+    }
+)
+
+.then(function(response){
+
+    if(!response.ok){
+
+        throw new Error(
+            "Challenges request failed"
+        );
+
+    }
+
+    return response.text();
 
 })
-.catch(()=>{
 
-document.getElementById("nazar").innerHTML="<p>❌ تعذر تحميل الصورة</p>";
+.then(function(text){
+
+    const lines =
+        text
+        .split(/\r?\n/);
+
+
+    /* حذف الأسطر الفارغة من البداية */
+
+    while(
+        lines.length &&
+        !lines[0].trim()
+    ){
+
+        lines.shift();
+
+    }
+
+
+    if(!lines.length){
+
+        throw new Error(
+            "Empty challenges file"
+        );
+
+    }
+
+
+    /* أول سطر = تاريخ التحديث */
+
+    const firstLine =
+        lines.shift().trim();
+
+
+    document
+    .getElementById(
+        "topdate"
+    )
+    .innerHTML =
+        `📅 <b>تاريخ التحديث:</b> ${escapeHTML(firstLine)}`;
+
+
+    /* الأقسام */
+
+    const sections = [];
+
+    let currentSection =
+        null;
+
+
+    lines.forEach(
+        function(rawLine){
+
+            const line =
+                rawLine.trim();
+
+
+            if(!line){
+                return;
+            }
+
+
+            /*
+                إذا كان السطر يبدأ
+                بنسبة مثل 0/3
+                فهو تحدي
+            */
+
+            if(
+                isChallengeLine(line)
+            ){
+
+                /*
+                    إذا لم يوجد عنوان
+                    نضع عنوان افتراضي
+                */
+
+                if(!currentSection){
+
+                    currentSection = {
+
+                        title:
+                            "التحديات اليومية",
+
+                        challenges:[]
+                    };
+
+
+                    sections.push(
+                        currentSection
+                    );
+
+                }
+
+
+                currentSection
+                .challenges
+                .push(line);
+
+            }
+
+            else{
+
+                /*
+                    السطر الذي لا يبدأ
+                    0/3 يعتبر عنوان قسم
+                */
+
+                currentSection = {
+
+                    title:line,
+
+                    challenges:[]
+                };
+
+
+                sections.push(
+                    currentSection
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+        حذف أي قسم ليس بداخله تحديات
+    */
+
+    const validSections =
+        sections.filter(
+            function(section){
+
+                return (
+                    section.title ||
+                    section
+                    .challenges
+                    .length
+                );
+
+            }
+        );
+
+
+    let html = "";
+
+
+    validSections.forEach(
+        function(section){
+
+            html +=
+                createSectionHTML(
+                    section.title,
+                    section.challenges
+                );
+
+        }
+    );
+
+
+    if(!html.trim()){
+
+        throw new Error(
+            "No challenges found"
+        );
+
+    }
+
+
+    const container =
+        document.getElementById(
+            "challenges"
+        );
+
+
+    container.classList.remove(
+        "loading"
+    );
+
+
+    container.innerHTML =
+        html;
+
+})
+
+.catch(function(error){
+
+    console.error(
+        error
+    );
+
+
+    const container =
+        document.getElementById(
+            "challenges"
+        );
+
+
+    container.classList.remove(
+        "loading"
+    );
+
+
+    container.innerHTML = `
+        <div class="error-message">
+            ❌ حدث خطأ أثناء تحميل التحديات.
+        </div>
+    `;
 
 });
+
+
+/* =========================================
+   موقع مدام نزار
+========================================= */
+
+function renderNazar(
+    imgUrl
+){
+
+    const safeUrl =
+        escapeHTML(
+            imgUrl
+        );
+
+
+    const nazar =
+        document.getElementById(
+            "nazar"
+        );
+
+
+    nazar.innerHTML = `
+
+        <h2>
+            📍 موقع مدام نزار
+        </h2>
+
+        <img
+            src="${safeUrl}"
+            alt="Madam Nazar Location"
+            loading="lazy"
+            decoding="async"
+            draggable="false"
+        >
+
+    `;
+
+}
+
+
+/* =========================================
+   تحميل nazar.txt
+========================================= */
+
+fetch(
+    "nazar.txt?v=" +
+    Date.now(),
+    {
+        cache:"no-store"
+    }
+)
+
+.then(function(response){
+
+    if(!response.ok){
+
+        throw new Error(
+            "Nazar request failed"
+        );
+
+    }
+
+    return response.text();
+
+})
+
+.then(function(text){
+
+    const url =
+        text
+        .split(/\r?\n/)
+        .map(function(line){
+
+            return line.trim();
+
+        })
+        .find(Boolean);
+
+
+    if(!url){
+
+        document
+        .getElementById(
+            "nazar"
+        )
+        .innerHTML = `
+
+            <h2>
+                📍 موقع مدام نزار
+            </h2>
+
+            <p>
+                ❌ لم يتم العثور على الصورة
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    renderNazar(
+        url
+    );
+
+})
+
+.catch(function(){
+
+    document
+    .getElementById(
+        "nazar"
+    )
+    .innerHTML = `
+
+        <h2>
+            📍 موقع مدام نزار
+        </h2>
+
+        <p>
+            ❌ تعذر تحميل الصورة
+        </p>
+
+    `;
+
+});
+
+
+/* =========================================
+   منع سحب الصور
+========================================= */
+
+document.addEventListener(
+    "mousedown",
+    function(e){
+
+        if(
+            e.target.tagName ===
+            "IMG"
+        ){
+
+            e.preventDefault();
+
+        }
+
+    }
+);
 
 </script>
 
