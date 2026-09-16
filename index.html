@@ -137,6 +137,43 @@ body{
 
 
 /* =========================================
+   Canvas الفقاعات
+========================================= */
+
+#bubbleCanvas{
+    position:fixed;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    z-index:0;
+
+    display:block;
+
+    /*
+       مهم:
+       يسمح بالضغط على الموقع بشكل طبيعي.
+       الضغط على المساحات الفارغة يتم التقاطه
+       من document لتفجير الفقاعات.
+    */
+    pointer-events:none;
+}
+
+
+/*
+   المحتوى فوق الفقاعات
+*/
+
+.topbar,
+.ticker,
+.wrap{
+    position:relative;
+    z-index:2;
+}
+
+
+/* =========================================
    الحاوية الرئيسية
 ========================================= */
 
@@ -271,8 +308,8 @@ header{
     background:
         linear-gradient(
             145deg,
-            rgba(255,255,255,.055),
-            rgba(255,255,255,.015)
+            rgba(20,23,30,.94),
+            rgba(12,15,20,.95)
         );
 
     box-shadow:var(--shadow);
@@ -894,15 +931,15 @@ footer p{
 
 @media (prefers-reduced-motion:reduce){
 
-    *,
-    *::before,
-    *::after{
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
+    .card{
+        animation:none;
+    }
 
-        transition-duration:.01ms !important;
-
-        scroll-behavior:auto !important;
+    .ticker__text,
+    .card,
+    .join-btn,
+    li{
+        transition:none;
     }
 
 }
@@ -912,6 +949,16 @@ footer p{
 
 
 <body>
+
+<!-- =====================================
+     خلفية الفقاعات
+====================================== -->
+
+<canvas
+    id="bubbleCanvas"
+    aria-hidden="true"
+></canvas>
+
 
 <div
     class="topbar"
@@ -1124,7 +1171,7 @@ document.addEventListener(
 
 
 /* =========================================
-   دالة تنظيف النص قبل وضعه داخل HTML
+   تنظيف النص
 ========================================= */
 
 function escapeHTML(value){
@@ -1196,8 +1243,6 @@ function showNextLine(){
 
 }
 
-
-/* تحميل ticker.txt */
 
 fetch(
     "ticker.txt?v=" +
@@ -1277,11 +1322,6 @@ fetch(
 
 /* =========================================
    استخراج التقدم
-   مثال:
-   0/3 اسلخ طير
-   يصبح:
-   progress = 0/3
-   text = اسلخ طير
 ========================================= */
 
 function parseChallengeLine(line){
@@ -1320,7 +1360,7 @@ function parseChallengeLine(line){
 
 
 /* =========================================
-   تحديد ما إذا كان السطر تحدي
+   هل السطر تحدي؟
 ========================================= */
 
 function isChallengeLine(line){
@@ -1333,7 +1373,7 @@ function isChallengeLine(line){
 
 
 /* =========================================
-   بناء بطاقة قسم
+   إنشاء بطاقة
 ========================================= */
 
 function createSectionHTML(
@@ -1452,8 +1492,6 @@ fetch(
         .split(/\r?\n/);
 
 
-    /* حذف الأسطر الفارغة من البداية */
-
     while(
         lines.length &&
         !lines[0].trim()
@@ -1473,8 +1511,6 @@ fetch(
     }
 
 
-    /* أول سطر = تاريخ التحديث */
-
     const firstLine =
         lines.shift().trim();
 
@@ -1486,8 +1522,6 @@ fetch(
     .innerHTML =
         `📅 <b>تاريخ التحديث:</b> ${escapeHTML(firstLine)}`;
 
-
-    /* الأقسام */
 
     const sections = [];
 
@@ -1507,20 +1541,9 @@ fetch(
             }
 
 
-            /*
-                إذا كان السطر يبدأ
-                بنسبة مثل 0/3
-                فهو تحدي
-            */
-
             if(
                 isChallengeLine(line)
             ){
-
-                /*
-                    إذا لم يوجد عنوان
-                    نضع عنوان افتراضي
-                */
 
                 if(!currentSection){
 
@@ -1548,11 +1571,6 @@ fetch(
 
             else{
 
-                /*
-                    السطر الذي لا يبدأ
-                    0/3 يعتبر عنوان قسم
-                */
-
                 currentSection = {
 
                     title:line,
@@ -1570,10 +1588,6 @@ fetch(
         }
     );
 
-
-    /*
-        حذف أي قسم ليس بداخله تحديات
-    */
 
     const validSections =
         sections.filter(
@@ -1804,6 +1818,1322 @@ document.addEventListener(
 
     }
 );
+
+
+/* ==========================================================
+   ==========================================================
+               نظام فقاعات TX66W
+   ==========================================================
+========================================================== */
+
+(function(){
+
+"use strict";
+
+
+/* =========================================
+   Canvas
+========================================= */
+
+const canvas =
+    document.getElementById(
+        "bubbleCanvas"
+    );
+
+
+const ctx =
+    canvas.getContext(
+        "2d",
+        {
+            alpha:true
+        }
+    );
+
+
+/* =========================================
+   إعدادات الفقاعات
+========================================= */
+
+const BUBBLE_CONFIG = {
+
+    text:"tx66w",
+
+    /*
+       العدد أقل على الجوال
+       للحفاظ على سلاسة الموقع
+    */
+
+    mobileCount:14,
+    desktopCount:22,
+
+    minRadius:24,
+    maxRadius:68,
+
+    speedMin:12,
+    speedMax:40,
+
+    particleCount:18,
+
+    maxDPR:1.6
+
+};
+
+
+/* =========================================
+   الألوان
+========================================= */
+
+const BUBBLE_COLORS = [
+
+    "#00EFFF",
+    "#00FF88",
+    "#FFE600",
+    "#FF375F",
+    "#FF00C8",
+    "#A855F7",
+    "#3B82F6",
+    "#FF7A00",
+    "#FFFFFF",
+    "#00FFD5"
+
+];
+
+
+/* =========================================
+   متغيرات
+========================================= */
+
+let width = 0;
+let height = 0;
+let dpr = 1;
+
+let bubbles = [];
+let particles = [];
+
+let lastFrame =
+    performance.now();
+
+
+/* =========================================
+   أدوات
+========================================= */
+
+function rand(min,max){
+
+    return (
+        Math.random() *
+        (max-min)
+    ) + min;
+
+}
+
+
+function randomColor(){
+
+    return BUBBLE_COLORS[
+        Math.floor(
+            Math.random() *
+            BUBBLE_COLORS.length
+        )
+    ];
+
+}
+
+
+function clampBubble(
+    value,
+    min,
+    max
+){
+
+    return Math.max(
+        min,
+        Math.min(
+            max,
+            value
+        )
+    );
+
+}
+
+
+function hexRGB(hex){
+
+    const value =
+        hex.replace(
+            "#",
+            ""
+        );
+
+
+    return {
+
+        r:
+            parseInt(
+                value.slice(0,2),
+                16
+            ),
+
+        g:
+            parseInt(
+                value.slice(2,4),
+                16
+            ),
+
+        b:
+            parseInt(
+                value.slice(4,6),
+                16
+            )
+
+    };
+
+}
+
+
+/* =========================================
+   تحويل الألوان مرة واحدة
+========================================= */
+
+const bubbleColorData =
+    BUBBLE_COLORS.map(
+        function(color){
+
+            return {
+
+                hex:color,
+
+                rgb:
+                    hexRGB(color)
+
+            };
+
+        }
+    );
+
+
+function pickBubbleColor(){
+
+    return bubbleColorData[
+        Math.floor(
+            Math.random() *
+            bubbleColorData.length
+        )
+    ];
+
+}
+
+
+/* =========================================
+   Bubble
+========================================= */
+
+class Bubble{
+
+    constructor(initial){
+
+        this.reset(
+            initial
+        );
+
+    }
+
+
+    reset(initial){
+
+        /*
+           depth:
+           0 = بعيد
+           1 = قريب
+        */
+
+        this.depth =
+            Math.pow(
+                Math.random(),
+                .8
+            );
+
+
+        /*
+           الحجم حسب العمق
+        */
+
+        this.radius =
+            BUBBLE_CONFIG.minRadius +
+            (
+                BUBBLE_CONFIG.maxRadius -
+                BUBBLE_CONFIG.minRadius
+            ) *
+            this.depth;
+
+
+        this.radius *=
+            rand(
+                .88,
+                1.08
+            );
+
+
+        /*
+           السرعة حسب العمق
+        */
+
+        this.speed =
+            BUBBLE_CONFIG.speedMin +
+            (
+                BUBBLE_CONFIG.speedMax -
+                BUBBLE_CONFIG.speedMin
+            ) *
+            this.depth;
+
+
+        this.speed *=
+            rand(
+                .85,
+                1.15
+            );
+
+
+        /*
+           Y
+        */
+
+        this.y =
+            rand(
+                this.radius,
+                Math.max(
+                    this.radius,
+                    height-this.radius
+                )
+            );
+
+
+        /*
+           X
+
+           الحركة:
+           اليسار -> اليمين
+        */
+
+        if(initial){
+
+            this.x =
+                rand(
+                    -this.radius,
+                    width+this.radius
+                );
+
+        }
+
+        else{
+
+            this.x =
+                -this.radius -
+                rand(
+                    30,
+                    180
+                );
+
+        }
+
+
+        /*
+           اللون
+        */
+
+        this.color =
+            pickBubbleColor();
+
+
+        /*
+           حركة الطفو
+        */
+
+        this.phase =
+            rand(
+                0,
+                Math.PI*2
+            );
+
+
+        this.floatSpeed =
+            rand(
+                .35,
+                .85
+            );
+
+
+        this.floatAmount =
+            rand(
+                2,
+                8
+            );
+
+
+        this.drawY =
+            this.y;
+
+
+        /*
+           الشفافية
+        */
+
+        this.alpha =
+            .28 +
+            this.depth*.48;
+
+
+        /*
+           النص
+        */
+
+        this.fontSize =
+            Math.max(
+                11,
+                this.radius*.34
+            );
+
+    }
+
+
+    update(
+        dt,
+        time
+    ){
+
+        this.x +=
+            this.speed *
+            dt;
+
+
+        this.drawY =
+            this.y +
+            Math.sin(
+                time *
+                this.floatSpeed +
+                this.phase
+            ) *
+            this.floatAmount;
+
+
+        /*
+           إذا خرجت يمين الشاشة
+        */
+
+        if(
+            this.x -
+            this.radius >
+            width + 80
+        ){
+
+            this.reset(
+                false
+            );
+
+        }
+
+    }
+
+
+    draw(){
+
+        const x =
+            Math.round(
+                this.x*2
+            )/2;
+
+
+        const y =
+            Math.round(
+                this.drawY*2
+            )/2;
+
+
+        const radius =
+            this.radius;
+
+
+        const rgb =
+            this.color.rgb;
+
+
+        ctx.save();
+
+
+        /*
+           جسم الفقاعة
+        */
+
+        ctx.globalAlpha =
+            this.alpha;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            x,
+            y,
+            radius,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fillStyle =
+            `rgba(
+                ${rgb.r},
+                ${rgb.g},
+                ${rgb.b},
+                .09
+            )`;
+
+
+        ctx.fill();
+
+
+        /*
+           إطار الفقاعة
+        */
+
+        ctx.globalAlpha =
+            .68;
+
+
+        ctx.lineWidth =
+            Math.max(
+                1,
+                radius*.02
+            );
+
+
+        ctx.strokeStyle =
+            `rgba(
+                ${rgb.r},
+                ${rgb.g},
+                ${rgb.b},
+                .78
+            )`;
+
+
+        ctx.stroke();
+
+
+        /*
+           اللمعة العلوية
+        */
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            x-radius*.21,
+
+            y-radius*.22,
+
+            radius*.59,
+
+            Math.PI*1.08,
+
+            Math.PI*1.48
+
+        );
+
+
+        ctx.lineWidth =
+            Math.max(
+                1.4,
+                radius*.03
+            );
+
+
+        ctx.lineCap =
+            "round";
+
+
+        ctx.strokeStyle =
+            "rgba(255,255,255,.48)";
+
+
+        ctx.stroke();
+
+
+        /*
+           نقطة انعكاس
+        */
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+
+            x-radius*.31,
+
+            y-radius*.34,
+
+            radius*.065,
+
+            0,
+
+            Math.PI*2
+
+        );
+
+
+        ctx.fillStyle =
+            "rgba(255,255,255,.58)";
+
+
+        ctx.fill();
+
+
+        /*
+           tx66w
+        */
+
+        ctx.globalAlpha =
+            .90;
+
+
+        ctx.font =
+            `800 ${this.fontSize}px Arial,sans-serif`;
+
+
+        ctx.textAlign =
+            "center";
+
+
+        ctx.textBaseline =
+            "middle";
+
+
+        /*
+           ظل النص بدون blur
+           للحفاظ على الأداء
+        */
+
+        ctx.fillStyle =
+            "rgba(0,0,0,.75)";
+
+
+        ctx.fillText(
+            BUBBLE_CONFIG.text,
+            x+1,
+            y+1
+        );
+
+
+        ctx.fillStyle =
+            "#ffffff";
+
+
+        ctx.fillText(
+            BUBBLE_CONFIG.text,
+            x,
+            y
+        );
+
+
+        ctx.restore();
+
+    }
+
+
+    contains(
+        x,
+        y
+    ){
+
+        const dx =
+            x-this.x;
+
+
+        const dy =
+            y-this.drawY;
+
+
+        const radius =
+            this.radius*1.12;
+
+
+        return (
+            dx*dx +
+            dy*dy
+        ) <= (
+            radius*radius
+        );
+
+    }
+
+
+    explode(){
+
+        createBubbleExplosion(
+
+            this.x,
+
+            this.drawY,
+
+            this.radius,
+
+            this.color
+
+        );
+
+
+        this.reset(
+            false
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   جزيئات الانفجار
+========================================= */
+
+class BubbleParticle{
+
+    constructor(
+        x,
+        y,
+        radius,
+        color
+    ){
+
+        this.x=x;
+        this.y=y;
+
+
+        const angle =
+            rand(
+                0,
+                Math.PI*2
+            );
+
+
+        const force =
+            rand(
+                60,
+                180
+            ) *
+            clampBubble(
+                radius/45,
+                .7,
+                1.3
+            );
+
+
+        this.vx =
+            Math.cos(angle) *
+            force;
+
+
+        this.vy =
+            Math.sin(angle) *
+            force;
+
+
+        this.size =
+            rand(
+                1.5,
+                4
+            );
+
+
+        this.color =
+            color;
+
+
+        this.life =
+            rand(
+                .28,
+                .55
+            );
+
+
+        this.maxLife =
+            this.life;
+
+
+        this.gravity =
+            45;
+
+    }
+
+
+    update(dt){
+
+        this.life -=
+            dt;
+
+
+        this.x +=
+            this.vx*dt;
+
+
+        this.y +=
+            this.vy*dt;
+
+
+        this.vx *=
+            .982;
+
+
+        this.vy *=
+            .982;
+
+
+        this.vy +=
+            this.gravity*dt;
+
+    }
+
+
+    draw(){
+
+        const alpha =
+            clampBubble(
+                this.life /
+                this.maxLife,
+                0,
+                1
+            );
+
+
+        const rgb =
+            this.color.rgb;
+
+
+        ctx.globalAlpha =
+            alpha;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.size,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fillStyle =
+            `rgb(
+                ${rgb.r},
+                ${rgb.g},
+                ${rgb.b}
+            )`;
+
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =========================================
+   موجة الانفجار
+========================================= */
+
+class BubbleShockwave{
+
+    constructor(
+        x,
+        y,
+        radius,
+        color
+    ){
+
+        this.x=x;
+        this.y=y;
+
+
+        this.radius =
+            radius*.3;
+
+
+        this.speed =
+            radius*4;
+
+
+        this.color =
+            color;
+
+
+        this.life =
+            .22;
+
+
+        this.maxLife =
+            .22;
+
+    }
+
+
+    update(dt){
+
+        this.life -=
+            dt;
+
+
+        this.radius +=
+            this.speed*dt;
+
+    }
+
+
+    draw(){
+
+        const alpha =
+            clampBubble(
+                this.life /
+                this.maxLife,
+                0,
+                1
+            );
+
+
+        const rgb =
+            this.color.rgb;
+
+
+        ctx.globalAlpha =
+            alpha*.75;
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            this.x,
+            this.y,
+            this.radius,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.lineWidth =
+            2;
+
+
+        ctx.strokeStyle =
+            `rgb(
+                ${rgb.r},
+                ${rgb.g},
+                ${rgb.b}
+            )`;
+
+
+        ctx.stroke();
+
+    }
+
+}
+
+
+/* =========================================
+   إنشاء الانفجار
+========================================= */
+
+function createBubbleExplosion(
+    x,
+    y,
+    radius,
+    color
+){
+
+    const amount =
+        Math.round(
+
+            BUBBLE_CONFIG
+            .particleCount *
+
+            clampBubble(
+                radius/45,
+                .75,
+                1.25
+            )
+
+        );
+
+
+    for(
+        let i=0;
+        i<amount;
+        i++
+    ){
+
+        particles.push(
+
+            new BubbleParticle(
+                x,
+                y,
+                radius,
+                color
+            )
+
+        );
+
+    }
+
+
+    particles.push(
+
+        new BubbleShockwave(
+            x,
+            y,
+            radius,
+            color
+        )
+
+    );
+
+}
+
+
+/* =========================================
+   Resize
+========================================= */
+
+function resizeBubbleCanvas(){
+
+    dpr =
+        Math.min(
+
+            window.devicePixelRatio ||
+            1,
+
+            BUBBLE_CONFIG.maxDPR
+
+        );
+
+
+    width =
+        window.innerWidth;
+
+
+    height =
+        window.innerHeight;
+
+
+    canvas.width =
+        Math.round(
+            width*dpr
+        );
+
+
+    canvas.height =
+        Math.round(
+            height*dpr
+        );
+
+
+    canvas.style.width =
+        width+"px";
+
+
+    canvas.style.height =
+        height+"px";
+
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+
+    ctx.imageSmoothingEnabled =
+        true;
+
+
+    createBubbles();
+
+}
+
+
+/* =========================================
+   إنشاء الفقاعات
+========================================= */
+
+function createBubbles(){
+
+    bubbles=[];
+    particles=[];
+
+
+    const count =
+        width < 700
+        ?
+        BUBBLE_CONFIG.mobileCount
+        :
+        BUBBLE_CONFIG.desktopCount;
+
+
+    for(
+        let i=0;
+        i<count;
+        i++
+    ){
+
+        bubbles.push(
+            new Bubble(true)
+        );
+
+    }
+
+
+    /*
+       البعيدة خلف القريبة
+    */
+
+    bubbles.sort(
+        function(a,b){
+
+            return (
+                a.depth -
+                b.depth
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   تفجير الفقاعة عند اللمس
+========================================= */
+
+function popBubbleAt(
+    x,
+    y
+){
+
+    /*
+       نبحث من القريب إلى البعيد
+    */
+
+    for(
+        let i=
+            bubbles.length-1;
+        i>=0;
+        i--
+    ){
+
+        if(
+            bubbles[i]
+            .contains(
+                x,
+                y
+            )
+        ){
+
+            bubbles[i]
+            .explode();
+
+
+            return true;
+
+        }
+
+    }
+
+
+    return false;
+
+}
+
+
+/* =========================================
+   التقاط اللمس / الماوس
+
+   نسمح للأزرار والروابط بالعمل.
+========================================= */
+
+document.addEventListener(
+    "pointerdown",
+    function(event){
+
+        /*
+           إذا ضغط المستخدم على رابط أو زر
+           لا نتدخل.
+        */
+
+        if(
+            event.target.closest(
+                "a,button,input,textarea,select"
+            )
+        ){
+
+            return;
+
+        }
+
+
+        popBubbleAt(
+            event.clientX,
+            event.clientY
+        );
+
+    },
+    {
+        passive:true
+    }
+);
+
+
+/* =========================================
+   رسم الفقاعات
+========================================= */
+
+function animateBubbles(now){
+
+    const dt =
+        Math.min(
+            (now-lastFrame)/1000,
+            .033
+        );
+
+
+    lastFrame =
+        now;
+
+
+    const time =
+        now/1000;
+
+
+    /*
+       Canvas شفاف:
+       نمسح فقط ولا نرسم خلفية.
+       خلفية الموقع الأصلية تبقى ظاهرة.
+    */
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /*
+       الفقاعات
+    */
+
+    for(
+        let i=0;
+        i<bubbles.length;
+        i++
+    ){
+
+        bubbles[i]
+        .update(
+            dt,
+            time
+        );
+
+
+        bubbles[i]
+        .draw();
+
+    }
+
+
+    /*
+       الانفجارات
+    */
+
+    for(
+        let i=
+            particles.length-1;
+        i>=0;
+        i--
+    ){
+
+        const particle =
+            particles[i];
+
+
+        particle.update(
+            dt
+        );
+
+
+        particle.draw();
+
+
+        if(
+            particle.life<=0
+        ){
+
+            particles.splice(
+                i,
+                1
+            );
+
+        }
+
+    }
+
+
+    ctx.globalAlpha =
+        1;
+
+
+    requestAnimationFrame(
+        animateBubbles
+    );
+
+}
+
+
+/* =========================================
+   عند الرجوع للتبويب
+========================================= */
+
+document.addEventListener(
+    "visibilitychange",
+    function(){
+
+        lastFrame =
+            performance.now();
+
+    }
+);
+
+
+/* =========================================
+   تشغيل الفقاعات
+========================================= */
+
+window.addEventListener(
+    "resize",
+    resizeBubbleCanvas
+);
+
+
+resizeBubbleCanvas();
+
+
+requestAnimationFrame(
+    animateBubbles
+);
+
+})();
 
 </script>
 
